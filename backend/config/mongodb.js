@@ -6,7 +6,7 @@ const connectDB = async() => {
         console.log("Database is connected")
     })
 
-    await mongoose.connect(`${process.env.MONGODB_URI}`)
+    await mongoose.connect(`${process.env.MONGODB_URI}/yungflame`)
 
 }
 
