@@ -1,272 +1,3 @@
-
-
-// import validator from "validator";
-// import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
-// import userModel from "../models/userModel.js";
-
-// const createToken = (id) => {
-//     return jwt.sign({ id }, process.env.JWT_SECRET);
-// };
-
-// // ROUTE FOR USER LOGIN
-// const loginUser = async (req, res) => {
-//     try{
-//         const {email, password} = req.body
-//         const user = await userModel.findOne({email})
-
-//         if (!user){
-//             return res.json({success:false, message: 'User already exists'})
-//         }
-//         const isMatch = await bcrypt.compare(password, user.password)
-
-//         if (isMatch){
-//             const token = createToken(user._id)
-//             res.json({success:true, token})
-//         }
-//         else{
-//             res.json({success: false, message: 'Invalid Credentials'})
-//         }
-
-//     } catch (error){
-//         console.log(error)
-//         res.json({success: false, message: error.message})
-//     }
-// };
-
-// // ROUTE FOR USER REGISTRATION
-// const registerUser = async (req, res) => {
-//     try {
-//         const { name, email, password } = req.body;
-
-//         // Checking if user already exists or not with a timeout
-//         const exists = await userModel.findOne({ email }).lean().exec();
-//         if (exists) {
-//             return res.json({ success: false, message: "User already exists" });
-//         }
-
-//         // Email format and strong password validation
-//         if (!validator.isEmail(email)) {
-//             return res.json({ success: false, message: "Please enter a valid email" });
-//         }
-//         if (password.length < 8) {
-//             return res.json({ success: false, message: "Please enter a strong password" });
-//         }
-
-//         // Hashing user password
-//         const salt = await bcrypt.genSalt(10);
-//         const hashedPassword = await bcrypt.hash(password, salt);
-
-//         const newUser = new userModel({
-//             name,
-//             email,
-//             password: hashedPassword,
-//         });
-
-//         const user = await newUser.save();
-
-//         const token = createToken(user._id);
-
-//         res.json({ success: true, token });
-//     } catch (error) {
-//         // console.error("Registration Error:", error); // Log full error for debugging
-//         // if (error.name === "MongoNetworkError" || error.message.includes("timed out")) {
-//         //     return res.json({ success: false, message: "Database connection timed out. Please try again later." });
-//         // }
-//         // res.json({ success: false, message: `Registration failed: ${error.message}` });
-//         console.log(error)
-//         res.json({success: false, message: error.message})
-//     }
-// };
-
-// // ROUTE FOR ADMIN LOGIN
-// const adminLogin = async (req, res) => {
-//     try {
-//         const { email, password } = req.body
-//         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-//             const token = jwt.sign(email+password , process.env.JWT_SECRET);
-//             res.json({ success: true, token });
-//         } else {
-//             res.json({ success: false, message: "Invalid credentials" });
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.json({ success: false, message: error.message });
-//     }
-// }
-
-// export { loginUser, registerUser, adminLogin };
-
-// ------------------------------------------------------------------------------------------------------------------
-
-// import validator from "validator";
-// import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
-// import userModel from "../models/userModel.js";
-// import nodemailer from "nodemailer";
-
-// const createToken = (id) => {
-//     return jwt.sign({ id }, process.env.JWT_SECRET);
-// };
-
-// // Configure nodemailer transporter
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: process.env.EMAIL_USER,
-//         pass: process.env.EMAIL_PASS
-//     },
-//     tls: {
-//         rejectUnauthorized: false
-//     }
-// });
-
-// // Function to send welcome email
-// const sendWelcomeEmail = async (userEmail, userName) => {
-//     try {
-//         console.log('Attempting to send email to:', userEmail);
-//         console.log('Email user configured:', process.env.EMAIL_USER);
-        
-//         const mailOptions = {
-//             from: process.env.EMAIL_USER,
-//             to: userEmail,
-//             subject: 'Account Created Successfully!',
-//             html: `
-//                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-//                     <h2 style="color: #333; text-align: center;">Welcome to Our YungFlame!</h2>
-//                     <p style="font-size: 16px; color: #555;">Hi ${userName},</p>
-//                     <p style="font-size: 16px; color: #555;">
-//                         Congratulations! Your account has been created successfully.
-//                     </p>
-//                     <p style="font-size: 16px; color: #555;">
-//                         You can now enjoy shopping on our platform. Thank you for joining us!
-//                     </p>
-//                     <div style="text-align: center; margin: 30px 0;">
-//                         <p style="font-size: 16px; color: #333; font-weight: bold;">Happy Shopping!</p>
-//                     </div>
-//                     <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-//                     <p style="font-size: 14px; color: #888; text-align: center;">
-//                         If you have any questions, feel free to contact our support team.
-//                     </p>
-//                 </div>
-//             `
-//         };
-
-//         const result = await transporter.sendMail(mailOptions);
-//         console.log('Welcome email sent successfully to:', userEmail);
-//         console.log('Email result:', result.messageId);
-//     } catch (error) {
-//         console.error('Error sending welcome email:', error.message);
-//         console.error('Full error:', error);
-//         // Don't throw error - email failure shouldn't affect registration
-//     }
-// };
-
-// // ROUTE FOR SENDING WELCOME EMAIL
-// const sendWelcomeEmailRoute = async (req, res) => {
-//     try {
-//         const { email, name } = req.body;
-        
-//         if (!email || !name) {
-//             return res.json({ success: false, message: "Email and name are required" });
-//         }
-
-//         await sendWelcomeEmail(email, name);
-//         res.json({ success: true, message: "Welcome email sent successfully" });
-//     } catch (error) {
-//         console.log(error);
-//         res.json({ success: false, message: "Failed to send welcome email" });
-//     }
-// };
-
-// // ROUTE FOR USER LOGIN
-// const loginUser = async (req, res) => {
-//     try{
-//         const {email, password} = req.body
-//         const user = await userModel.findOne({email})
-
-//         if (!user){
-//             return res.json({success:false, message: 'User does not exist'})
-//         }
-//         const isMatch = await bcrypt.compare(password, user.password)
-
-//         if (isMatch){
-//             const token = createToken(user._id)
-//             res.json({success:true, token})
-//         }
-//         else{
-//             res.json({success: false, message: 'Invalid Credentials'})
-//         }
-
-//     } catch (error){
-//         console.log(error)
-//         res.json({success: false, message: error.message})
-//     }
-// };
-
-// // ROUTE FOR USER REGISTRATION
-// const registerUser = async (req, res) => {
-//     try {
-//         const { name, email, password } = req.body;
-
-//         // Checking if user already exists or not with a timeout
-//         const exists = await userModel.findOne({ email }).lean().exec();
-//         if (exists) {
-//             return res.json({ success: false, message: "User already exists" });
-//         }
-
-//         // Email format and strong password validation
-//         if (!validator.isEmail(email)) {
-//             return res.json({ success: false, message: "Please enter a valid email" });
-//         }
-//         if (password.length < 8) {
-//             return res.json({ success: false, message: "Please enter a strong password" });
-//         }
-
-//         // Hashing user password
-//         const salt = await bcrypt.genSalt(10);
-//         const hashedPassword = await bcrypt.hash(password, salt);
-
-//         const newUser = new userModel({
-//             name,
-//             email,
-//             password: hashedPassword,
-//         });
-
-//         const user = await newUser.save();
-
-//         const token = createToken(user._id);
-
-//         // Send welcome email after successful registration
-//         await sendWelcomeEmail(email, name);
-
-//         res.json({ success: true, token });
-//     } catch (error) {
-//         console.log(error)
-//         res.json({success: false, message: error.message})
-//     }
-// };
-
-// // ROUTE FOR ADMIN LOGIN
-// const adminLogin = async (req, res) => {
-//     try {
-//         const { email, password } = req.body
-//         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-//             const token = jwt.sign(email+password , process.env.JWT_SECRET);
-//             res.json({ success: true, token });
-//         } else {
-//             res.json({ success: false, message: "Invalid credentials" });
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.json({ success: false, message: error.message });
-//     }
-// }
-
-// export { loginUser, registerUser, adminLogin, sendWelcomeEmailRoute };
-
-// -----------------------------------------------------------------------------------------------------------
-
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -275,6 +6,7 @@ import nodemailer from "nodemailer";
 
 // In-memory OTP store (replace with DB/Redis for production)
 const otpStore = new Map();
+const forgotPasswordOtpStore = new Map();
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -321,7 +53,7 @@ const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Step 1: Send OTP
+// Step 1: Send OTP for registration
 const sendOtp = async (req, res) => {
   const { email } = req.body;
   if (!email || !validator.isEmail(email))
@@ -341,7 +73,17 @@ const sendOtp = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Your Verification OTP",
-      html: `<p>Your OTP is <b>${otp}</b>. It expires in 5 minutes.</p>`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333; text-align: center;">Account Verification</h2>
+          <p>Your OTP for account verification is:</p>
+          <div style="text-align: center; font-size: 24px; font-weight: bold; color: #007bff; margin: 20px 0;">
+            ${otp}
+          </div>
+          <p>This OTP will expire in 5 minutes.</p>
+          <p>If you didn't request this verification, please ignore this email.</p>
+        </div>
+      `,
     });
     res.json({ success: true, message: "OTP sent to your email" });
   } catch (error) {
@@ -395,6 +137,127 @@ const verifyOtpAndRegister = async (req, res) => {
   }
 };
 
+// Send OTP for forgot password
+const sendForgotPasswordOtp = async (req, res) => {
+  const { email } = req.body;
+  
+  if (!email || !validator.isEmail(email)) {
+    return res.status(400).json({ success: false, message: "Valid email required" });
+  }
+
+  try {
+    // Check if user exists
+    const user = await userModel.findOne({ email }).lean().exec();
+    if (!user) {
+      return res.json({ success: false, message: "No account found with this email" });
+    }
+
+    const otp = generateOTP();
+    
+    // Store OTP with 10 min expiry for forgot password
+    forgotPasswordOtpStore.set(email, { 
+      otp, 
+      expiresAt: Date.now() + 10 * 60 * 1000,
+      verified: false 
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset OTP",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333; text-align: center;">Password Reset Request</h2>
+          <p>You have requested to reset your password. Your OTP is:</p>
+          <div style="text-align: center; font-size: 24px; font-weight: bold; color: #dc3545; margin: 20px 0;">
+            ${otp}
+          </div>
+          <p>This OTP will expire in 10 minutes.</p>
+          <p>If you didn't request this password reset, please ignore this email.</p>
+        </div>
+      `,
+    });
+
+    res.json({ success: true, message: "Password reset OTP sent to your email" });
+  } catch (error) {
+    console.error("Error sending forgot password OTP:", error);
+    res.json({ success: false, message: "Failed to send OTP" });
+  }
+};
+
+// Verify forgot password OTP
+const verifyForgotPasswordOtp = async (req, res) => {
+  const { email, otp } = req.body;
+  
+  if (!email || !otp) {
+    return res.status(400).json({ success: false, message: "Email and OTP required" });
+  }
+
+  const record = forgotPasswordOtpStore.get(email);
+  
+  if (!record) {
+    return res.json({ success: false, message: "OTP expired or not found" });
+  }
+  
+  if (record.expiresAt < Date.now()) {
+    forgotPasswordOtpStore.delete(email);
+    return res.json({ success: false, message: "OTP expired" });
+  }
+  
+  if (record.otp !== otp) {
+    return res.json({ success: false, message: "Invalid OTP" });
+  }
+
+  // Mark OTP as verified but don't delete yet
+  record.verified = true;
+  forgotPasswordOtpStore.set(email, record);
+
+  res.json({ success: true, message: "OTP verified successfully" });
+};
+
+// Reset password after OTP verification
+const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  
+  if (!email || !newPassword) {
+    return res.status(400).json({ success: false, message: "Email and new password required" });
+  }
+
+  if (newPassword.length < 8) {
+    return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
+  }
+
+  const record = forgotPasswordOtpStore.get(email);
+  
+  if (!record || !record.verified) {
+    return res.json({ success: false, message: "OTP not verified or expired" });
+  }
+
+  if (record.expiresAt < Date.now()) {
+    forgotPasswordOtpStore.delete(email);
+    return res.json({ success: false, message: "OTP expired" });
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await userModel.findOneAndUpdate(
+      { email },
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    // Delete the OTP record after successful password reset
+    forgotPasswordOtpStore.delete(email);
+
+    res.json({ success: true, message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.json({ success: false, message: "Failed to reset password" });
+  }
+};
+
 // Existing routes for login and admin login
 const loginUser = async (req, res) => {
   try {
@@ -430,12 +293,6 @@ const adminLogin = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
 // Get user profile
 const getUserProfile = async (req, res) => {
   try {
@@ -461,11 +318,11 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-// Update user profile
+// Update user profile (without password)
 const updateUserProfile = async (req, res) => {
   try {
     const { userId } = req.body;
-    const { name, email, password } = req.body;
+    const { name, email } = req.body;
 
     // Validation
     if (!name || !email) {
@@ -503,24 +360,11 @@ const updateUserProfile = async (req, res) => {
       }
     }
 
-    // Prepare update data
+    // Prepare update data (excluding password)
     const updateData = {
       name: name.trim(),
       email: email.toLowerCase().trim()
     };
-
-    // Handle password update if provided
-    if (password && password.trim() !== '') {
-      if (password.length < 8) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Password must be at least 8 characters long" 
-        });
-      }
-      
-      const salt = await bcrypt.genSalt(10);
-      updateData.password = await bcrypt.hash(password, salt);
-    }
 
     // Update user
     const updatedUser = await userModel.findByIdAndUpdate(
@@ -567,9 +411,63 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+// Change password (separate function)
+const changePassword = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const { currentPassword, newPassword, confirmPassword } = req.body;
 
+    // Validation
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "All password fields are required" 
+      });
+    }
 
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "New password and confirm password do not match" 
+      });
+    }
 
+    if (newPassword.length < 8) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "New password must be at least 8 characters long" 
+      });
+    }
+
+    // Check if user exists
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isCurrentPasswordValid) {
+      return res.json({ success: false, message: "Current password is incorrect" });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update password
+    await userModel.findByIdAndUpdate(userId, { password: hashedNewPassword });
+
+    res.json({ 
+      success: true, 
+      message: "Password changed successfully"
+    });
+
+  } catch (error) {
+    console.error("Error changing password:", error);
+    res.json({ success: false, message: "Failed to change password" });
+  }
+};
 
 export {
   sendOtp,
@@ -578,5 +476,9 @@ export {
   adminLogin,
   sendWelcomeEmail,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  sendForgotPasswordOtp,
+  verifyForgotPasswordOtp,
+  resetPassword,
+  changePassword
 };
