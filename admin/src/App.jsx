@@ -48,7 +48,6 @@
 
 // export default App
 
-
 import React, { useEffect, useState } from 'react'
 import Navbar from '../src/components/Navbar'
 import Sidebar from './components/Sidebar'
@@ -56,8 +55,9 @@ import {Routes, Route} from 'react-router-dom'
 import Add from './pages/Add'
 import List from './pages/List'
 import Orders from './pages/Orders'
-import AddOrderManually from './components/AddOrderManually'
+import Queries from './pages/Queries'
 import Login from './components/Login'
+import AddOrderManually from './components/AddOrderManually'
 
 import { ToastContainer } from 'react-toastify';
 
@@ -88,7 +88,8 @@ const App = () => {
               <Route path='/add' element={<Add token={token} />} />
               <Route path='/list' element={<List token={token} />} />
               <Route path='/orders' element={<Orders token={token} />} />
-              <Route path='/add-order' element={<AddOrderManually token={token} />} />
+              <Route path='/queries' element={<Queries token={token} />} />
+              <Route path='/manual/order' element={<AddOrderManually token={token} />} />
             </Routes>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
-import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -367,69 +366,7 @@ const onSubmitHandler = async (event) => {
                 </div>
 
                 <div className="space-y-4">
-                  {/* Stripe Payment */}
-                  <div
-                    onClick={() => setMethod("stripe")}
-                    className={`relative border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                      method === "stripe" 
-                        ? "border-blue-500 bg-blue-50 shadow-md" 
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                            method === "stripe" 
-                              ? "border-blue-500 bg-blue-500" 
-                              : "border-gray-300"
-                          }`}
-                        >
-                          {method === "stripe" && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
-                        </div>
-                        <img 
-                          className="h-6" 
-                          src={assets.stripe_logo} 
-                          alt="Stripe" 
-                        />
-                      </div>
-                      <span className="text-sm text-gray-500 font-medium">Credit/Debit Card</span>
-                    </div>
-                  </div>
-
-                  {/* Razorpay Payment */}
-                  <div
-                    onClick={() => setMethod("razorpay")}
-                    className={`relative border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                      method === "razorpay" 
-                        ? "border-blue-500 bg-blue-50 shadow-md" 
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                            method === "razorpay" 
-                              ? "border-blue-500 bg-blue-500" 
-                              : "border-gray-300"
-                          }`}
-                        >
-                          {method === "razorpay" && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
-                        </div>
-                        <img
-                          className="h-6"
-                          src={assets.razorpay_logo}
-                          alt="Razorpay"
-                        />
-                      </div>
-                      <span className="text-sm text-gray-500 font-medium">UPI/Wallet</span>
-                    </div>
-                  </div>
+                  
 
                   {/* Cash on Delivery */}
                   <div
