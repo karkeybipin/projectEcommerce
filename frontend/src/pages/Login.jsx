@@ -282,11 +282,11 @@
 
 
 
-import React, { useContext, useEffect, useState } from "react";
-import { ShopContext } from "./../context/ShopContext";
 import axios from "axios";
+import { AnimatePresence, motion } from "framer-motion";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { motion, AnimatePresence } from "framer-motion";
+import { ShopContext } from "./../context/ShopContext";
 
 const Login = () => {
   const { token, setToken, navigate, backendUrl } = useContext(ShopContext);

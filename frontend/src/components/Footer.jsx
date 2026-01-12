@@ -30,7 +30,7 @@ const Footer = () => {
         <div>
           <img src={assets.logo} className="mb-5 w-15" alt="" />
           <p className="w-full md:w-2/3 text-gray-600">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Yung flame is the Best online platform to ever exist, which concern the involvement of the online sellers and customers and make the product available through the convenient process and payment easier than ever..
           </p>
         </div>
         <div>
@@ -45,8 +45,8 @@ const Footer = () => {
         <div>
             <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
             <ul className='flex flex-col gap-1 text-gray-600'>
-                <li>+977-9876543210</li>
-                <li>youremail@email.com</li>
+                <li>+977-9869499054</li>
+                <li>karkeybipin@email.com</li>
             </ul>
         </div>
 
