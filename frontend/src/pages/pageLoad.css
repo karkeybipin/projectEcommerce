@@ -1,4 +1,4 @@
-int j = 1;
+/* int j = 1;
         while (j <= 5)
         {
             Console.WriteLine(j);
@@ -197,4 +197,4 @@ int j = 1;
         int sum = num1 + num2;
         Console.WriteLine("Sum: " + sum);
     }
-}
+} */
